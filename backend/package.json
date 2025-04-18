@@ -2,10 +2,10 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
-  },
+ "scripts": {
+  "test": "jest",
+  "start": "node server.js"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -17,5 +17,10 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "mongodb-memory-server": "^10.1.4",
+    "supertest": "^7.1.0"
   }
 }
