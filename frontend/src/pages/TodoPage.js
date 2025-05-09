@@ -65,66 +65,103 @@ const TodoPage = () => {
     navigate("/login");
   };
 
-  return (
-    <div style={{ padding: "2rem" }}>
-      <h1>Todo List</h1>
-      <button onClick={logout}>Logout</button>
+  const styles = {
+    container: { maxWidth: "600px", margin: "auto", padding: "2rem", fontFamily: "Arial" },
+    header: { display: "flex", justifyContent: "space-between", alignItems: "center" },
+    form: { display: "flex", gap: "10px", marginTop: "1rem" },
+    input: { flex: 1, padding: "10px", fontSize: "14px", borderRadius: "4px", border: "1px solid #ccc" },
+    button: {
+      padding: "10px 15px",
+      backgroundColor: "#2980b9",
+      color: "#fff",
+      border: "none",
+      borderRadius: "4px",
+      cursor: "pointer"
+    },
+    section: { marginTop: "2rem" },
+    taskItem: {
+      backgroundColor: "#f4f6f7",
+      padding: "10px",
+      marginBottom: "8px",
+      borderRadius: "5px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between"
+    },
+    taskTitle: { flex: 1 },
+    taskButtons: { display: "flex", gap: "8px", marginLeft: "10px" },
+    editInput: { flex: 1, padding: "8px", marginRight: "10px", borderRadius: "4px" }
+  };
 
-      <form onSubmit={addTask} style={{ marginTop: "1rem" }}>
+  return (
+    <div style={styles.container}>
+      <div style={styles.header}>
+        <h1>📝 Todo List</h1>
+        <button onClick={logout} style={{ ...styles.button, backgroundColor: "#c0392b" }}>
+          Logout
+        </button>
+      </div>
+
+      <form onSubmit={addTask} style={styles.form}>
         <input
           value={newTask}
           onChange={(e) => setNewTask(e.target.value)}
           placeholder="Add new task..."
+          style={styles.input}
         />
-        <button type="submit">Add</button>
+        <button type="submit" style={styles.button}>Add</button>
       </form>
 
-      <h2>Pending Tasks</h2>
-      <ul>
-        {tasks
-          .filter((t) => !t.completed)
-          .map((task) => (
-            <li key={task._id}>
-              {editing === task._id ? (
-                <>
-                  <input
-                    value={editTitle}
-                    onChange={(e) => setEditTitle(e.target.value)}
-                  />
-                  <button onClick={() => {
+      <div style={styles.section}>
+        <h2>🕒 Pending Tasks</h2>
+        {tasks.filter((t) => !t.completed).map((task) => (
+          <div key={task._id} style={styles.taskItem}>
+            {editing === task._id ? (
+              <>
+                <input
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  style={styles.editInput}
+                />
+                <button
+                  style={styles.button}
+                  onClick={() => {
                     updateTask(task._id, { title: editTitle });
                     setEditing(null);
-                  }}>Save</button>
-                </>
-              ) : (
-                <>
-                  {task.title}
+                  }}
+                >
+                  Save
+                </button>
+              </>
+            ) : (
+              <>
+                <span style={styles.taskTitle}>{task.title}</span>
+                <div style={styles.taskButtons}>
                   <button onClick={() => updateTask(task._id, { completed: true })}>✔</button>
                   <button onClick={() => {
                     setEditing(task._id);
                     setEditTitle(task.title);
                   }}>✏️</button>
                   <button onClick={() => deleteTask(task._id)}>🗑</button>
-                </>
-              )}
-            </li>
-          ))}
-      </ul>
+                </div>
+              </>
+            )}
+          </div>
+        ))}
+      </div>
 
-      <h2>Completed Tasks</h2>
-      <ul>
-        {tasks
-          .filter((t) => t.completed)
-          .map((task) => (
-            <li key={task._id}>
-              {task.title}
-              <button onClick={() => updateTask(task._id, { completed: false })}>
-                ↩ Undo
-              </button>
+      <div style={styles.section}>
+        <h2>✅ Completed Tasks</h2>
+        {tasks.filter((t) => t.completed).map((task) => (
+          <div key={task._id} style={styles.taskItem}>
+            <span>{task.title}</span>
+            <div style={styles.taskButtons}>
+              <button onClick={() => updateTask(task._id, { completed: false })}>↩ Undo</button>
               <button onClick={() => deleteTask(task._id)}>🗑</button>
-            </li>
-          ))}
-      </ul>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
